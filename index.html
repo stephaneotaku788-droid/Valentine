@@ -31,10 +31,6 @@ body {
     position: relative;
 }
 
-h2 {
-    margin-top: 0;
-}
-
 button {
     width: 100%;
     padding: 15px;
@@ -77,20 +73,29 @@ button {
 </div>
 
 <script>
-// 🎵 Son "hehehe" (base64, mobile-safe)
+// 🔊 Son "hehehe"
 const heheSound = new Audio(
 "data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQcAAAAAAP//AAD//wAA//8AAP//AAD//wAA"
 );
 
 const non = document.getElementById("non");
+const oui = document.getElementById("oui");
 const box = document.querySelector(".box");
 const counter = document.getElementById("counter");
 
 let tries = 0;
 
-// Fuite + son + compteur
+// 👉 BLOQUER TOUT CLICK SUR "NON"
+non.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+});
+
+// 👉 LOGIQUE MOBILE PRINCIPALE
 non.addEventListener("touchstart", e => {
     e.preventDefault();
+    e.stopPropagation();
 
     tries++;
     counter.innerText = "Tentatives : " + tries;
@@ -103,22 +108,12 @@ non.addEventListener("touchstart", e => {
     const maxX = box.clientWidth - non.clientWidth - 10;
     const maxY = box.clientHeight - non.clientHeight - 10;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    non.style.left = x + "px";
-    non.style.top = y + "px";
+    non.style.left = Math.random() * maxX + "px";
+    non.style.top  = Math.random() * maxY + "px";
 });
 
-// Si clic par miracle 😈
-non.addEventListener("click", () => {
-    non.innerText = "Oui 😌";
-    non.style.background = "hotpink";
-    non.style.color = "white";
-});
-
-// Bouton OUI
-document.getElementById("oui").onclick = () => {
+// 👉 BOUTON OUI
+oui.onclick = () => {
     document.body.innerHTML = `
         <div style="text-align:center;color:white;">
             <h1>💘 Hehehe 😌</h1>
