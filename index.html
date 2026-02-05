@@ -1,127 +1,146 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💖 Question importante</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon cœur 💖</title>
 
-<style>
-* {
-    box-sizing: border-box;
-    touch-action: manipulation;
-}
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9acb, #ff6fae);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
 
-body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #ff9ecb, #ff5fa2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-}
+    .card {
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      width: 85%;
+      max-width: 360px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 2;
+    }
 
-.box {
-    background: white;
-    width: 90%;
-    max-width: 320px;
-    padding: 25px;
-    border-radius: 25px;
-    text-align: center;
-    position: relative;
-}
+    h1 {
+      margin-top: 0;
+      font-size: 22px;
+    }
 
-button {
-    width: 100%;
-    padding: 15px;
-    margin-top: 15px;
-    font-size: 18px;
-    border-radius: 30px;
-    border: none;
-}
+    p {
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
 
-#oui {
-    background: hotpink;
-    color: white;
-}
+    .buttons {
+      position: relative;
+      height: 120px;
+    }
 
-#non {
-    background: #eee;
-    position: absolute;
-    left: 20px;
-    bottom: 20px;
-}
+    #yes {
+      padding: 12px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      background: #ff4f91;
+      color: white;
+      cursor: pointer;
+    }
 
-#counter {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #666;
-}
-</style>
+    #no {
+      position: absolute;
+      padding: 4px 8px;
+      font-size: 11px;
+      border-radius: 20px;
+      border: none;
+      background: #ddd;
+      cursor: pointer;
+      opacity: 0.7;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* ❤️ COEURS */
+    .heart {
+      position: fixed;
+      top: -20px;
+      font-size: 20px;
+      animation: fall linear forwards;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="box">
-    <h2>💖 Mon cœur…</h2>
+  <div class="card">
+    <h1>💖 Mon cœur...</h1>
     <p>Est-ce que tu veux être ma Valentine ?</p>
 
-    <button id="oui">Oui 💘</button>
-    <button id="non">Non 😏</button>
+    <div class="buttons">
+      <button id="yes">Oui 💕</button>
+      <button id="no">Non 😉</button>
+    </div>
+  </div>
 
-    <div id="counter">Tentatives : 0</div>
-</div>
+  <script>
+    const noBtn = document.getElementById("no");
+    const container = document.querySelector(".buttons");
+    const yesBtn = document.getElementById("yes");
 
-<script>
-// 🔊 Son "hehehe"
-const heheSound = new Audio(
-"data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQcAAAAAAP//AAD//wAA//8AAP//AAD//wAA"
-);
+    function moveButton() {
+      const maxX = container.clientWidth - noBtn.offsetWidth;
+      const maxY = container.clientHeight - noBtn.offsetHeight;
 
-const non = document.getElementById("non");
-const oui = document.getElementById("oui");
-const box = document.querySelector(".box");
-const counter = document.getElementById("counter");
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
 
-let tries = 0;
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
 
-// 👉 BLOQUER TOUT CLICK SUR "NON"
-non.addEventListener("click", e => {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-});
+    noBtn.addEventListener("mouseenter", moveButton);
+    noBtn.addEventListener("touchstart", moveButton);
 
-// 👉 LOGIQUE MOBILE PRINCIPALE
-non.addEventListener("touchstart", e => {
-    e.preventDefault();
-    e.stopPropagation();
+    // ❤️ COEURS QUI TOMBENT
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "❤️";
 
-    tries++;
-    counter.innerText = "Tentatives : " + tries;
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+      heart.style.fontSize = (16 + Math.random() * 20) + "px";
 
-    heheSound.currentTime = 0;
-    heheSound.play();
+      document.body.appendChild(heart);
 
-    if (navigator.vibrate) navigator.vibrate(60);
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }
 
-    const maxX = box.clientWidth - non.clientWidth - 10;
-    const maxY = box.clientHeight - non.clientHeight - 10;
-
-    non.style.left = Math.random() * maxX + "px";
-    non.style.top  = Math.random() * maxY + "px";
-});
-
-// 👉 BOUTON OUI
-oui.onclick = () => {
-    document.body.innerHTML = `
-        <div style="text-align:center;color:white;">
-            <h1>💘 Hehehe 😌</h1>
-            <p>Après ${tries} tentatives… tu as dit OUI 💖</p>
-        </div>
-    `;
-};
-</script>
+    yesBtn.addEventListener("click", () => {
+      for (let i = 0; i < 30; i++) {
+        setTimeout(createHeart, i * 100);
+      }
+    });
+  </script>
 
 </body>
 </html>
