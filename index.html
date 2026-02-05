@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💖 Question importante</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    touch-action: manipulation;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9ecb, #ff5fa2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+}
+
+.box {
+    background: white;
+    width: 90%;
+    max-width: 320px;
+    padding: 25px;
+    border-radius: 25px;
+    text-align: center;
+    position: relative;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 15px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+}
+
+#oui {
+    background: hotpink;
+    color: white;
+}
+
+#non {
+    background: #eee;
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+}
+
+#counter {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>💖 Mon cœur…</h2>
+    <p>Est-ce que tu veux être ma Valentine ?</p>
+
+    <button id="oui">Oui 💘</button>
+    <button id="non">Non 😏</button>
+
+    <div id="counter">Tentatives : 0</div>
+</div>
+
+<script>
+// 🎵 Son "hehehe" (base64, mobile-safe)
+const heheSound = new Audio(
+"data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQcAAAAAAP//AAD//wAA//8AAP//AAD//wAA"
+);
+
+const non = document.getElementById("non");
+const box = document.querySelector(".box");
+const counter = document.getElementById("counter");
+
+let tries = 0;
+
+// Fuite + son + compteur
+non.addEventListener("touchstart", e => {
+    e.preventDefault();
+
+    tries++;
+    counter.innerText = "Tentatives : " + tries;
+
+    heheSound.currentTime = 0;
+    heheSound.play();
+
+    if (navigator.vibrate) navigator.vibrate(60);
+
+    const maxX = box.clientWidth - non.clientWidth - 10;
+    const maxY = box.clientHeight - non.clientHeight - 10;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    non.style.left = x + "px";
+    non.style.top = y + "px";
+});
+
+// Si clic par miracle 😈
+non.addEventListener("click", () => {
+    non.innerText = "Oui 😌";
+    non.style.background = "hotpink";
+    non.style.color = "white";
+});
+
+// Bouton OUI
+document.getElementById("oui").onclick = () => {
+    document.body.innerHTML = `
+        <div style="text-align:center;color:white;">
+            <h1>💘 Hehehe 😌</h1>
+            <p>Après ${tries} tentatives… tu as dit OUI 💖</p>
+        </div>
+    `;
+};
+</script>
+
+</body>
+</html>
